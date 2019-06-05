@@ -1,94 +1,36 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, Animated, Easing, StyleSheet } from "react-native";
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 150
-  }
-});
+import React, { useRef, useEffect } from "react";
+import { View, Animated, Text, Easing } from "react-native";
 
 export default function Sequence() {
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const elements = Array.from({ length: 500 }).map((_, i) => i);
+  const animations = useRef(elements.map(() => new Animated.Value(0))).current;
+
   const animate = () => {
-    animatedValue.setValue(0);
-    Animated.timing(animatedValue, {
-      toValue: 1,
-      duration: 2000,
-      easing: Easing.linear
-    }).start(animate);
+    const allAnimations = animations.map(a =>
+      Animated.timing(a, {
+        toValue: 1,
+        duration: 50
+      })
+    );
+    Animated.sequence(allAnimations).start();
   };
 
   useEffect(animate, []);
-
-  const marginLeft = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 300]
-  });
-  const opacity = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 1, 0]
-  });
-  const movingMargin = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 300, 0]
-  });
-  const textSize = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [18, 32, 18]
-  });
-  const rotateX = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ["0deg", "180deg", "0deg"]
-  });
   return (
-    <View style={styles.container}>
-      <Animated.View
-        style={{
-          marginLeft,
-          height: 30,
-          width: 40,
-          backgroundColor: "red"
-        }}
-      />
-      <Animated.View
-        style={{
-          opacity,
-          marginTop: 10,
-          height: 30,
-          width: 40,
-          backgroundColor: "blue"
-        }}
-      />
-      <Animated.View
-        style={{
-          marginLeft: movingMargin,
-          marginTop: 10,
-          height: 30,
-          width: 40,
-          backgroundColor: "orange"
-        }}
-      />
-      <Animated.Text
-        style={{
-          fontSize: textSize,
-          marginTop: 10,
-          color: "green"
-        }}
-      >
-        Animated Text!
-      </Animated.Text>
-      <Animated.View
-        style={{
-          transform: [{ rotateX }],
-          marginTop: 50,
-          height: 30,
-          width: 40,
-          backgroundColor: "black"
-        }}
-      >
-        <Text style={{ color: "white" }}>Hello from TransformX</Text>
-      </Animated.View>
+    <View style={{ flexDirection: "row", flexWrap: "wrap", flex: 1 }}>
+      {elements.map(k => (
+        <Animated.Text
+          key={k}
+          style={{
+            width: 20,
+            height: 20,
+            marginLeft: 3,
+            marginTop: 3,
+            backgroundColor: "red",
+            opacity: animations[k]
+          }}
+        />
+      ))}
     </View>
   );
 }
