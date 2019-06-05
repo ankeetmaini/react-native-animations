@@ -24,8 +24,7 @@ export default function Sequence() {
           style={{
             width: 20,
             height: 20,
-            marginLeft: 3,
-            marginTop: 3,
+            margin: 2,
             backgroundColor: "red",
             opacity: animations[k]
           }}
