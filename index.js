@@ -10,5 +10,6 @@ import Staggered from "./src/Staggered";
 import Draggable from "./src/Draggable";
 import Colors from "./src/Colors";
 import Flip from "./src/Flip";
+import PetrolPumpCounter from "./src/PetrolPumpCounter";
 
-AppRegistry.registerComponent(appName, () => Flip);
+AppRegistry.registerComponent(appName, () => PetrolPumpCounter);
